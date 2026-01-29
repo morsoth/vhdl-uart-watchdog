@@ -25,7 +25,7 @@ architecture rtl of uart_rx is
     signal tick_count : natural range 0 to OVERSAMPLING-1 := 0;
     signal data_idx : natural range 0 to DATA_BITS-1 := 0;
 
-    signal rx_ff1, rx_ff2 : std_logic := '1';
+    signal rx_ff1, rx_ff2 : std_logic := '1';  -- to reduce metastability 
     signal data_reg : std_logic_vector(DATA_BITS-1 downto 0) := (others => '0');
 begin
     process(clk)

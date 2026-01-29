@@ -27,27 +27,17 @@ architecture tb of tb_uart_tx is
 	signal tx_start  : std_logic := '0';
 	signal tx_data   : std_logic_vector(DATA_BITS-1 downto 0) := (others => '0');
 	signal tx        : std_logic;
+	signal tx_accept  : std_logic;
 	signal tx_busy   : std_logic;
 
-	signal data_to_read : std_logic_vector(DATA_BITS-1 downto 0);
-
-	procedure send_uart_frame(
+	procedure check_tx_frame (
 		signal tx_line       : in  std_logic;
-		signal tx_start_line : out std_logic;
-		signal tx_data_line  : out std_logic_vector(DATA_BITS-1 downto 0);
 		signal data  		 : in std_logic_vector(DATA_BITS-1 downto 0)
 	) is
 	begin
 		wait until rising_edge(clk);
-		tx_data_line<= data;
-		tx_start_line <= '1';
 
-		if tx_busy /= '0' then
-			wait until tx_busy = '0';
-		end if;
 		wait for T_BIT/2;
-		
-		tx_start_line <= '0';
 
 		assert tx_line = '0'
 			report "[ERROR]: expected start bit to be 0, got " & std_logic'image(tx_line) severity error;
@@ -92,6 +82,7 @@ begin
 			tx_start  => tx_start,
 			tx_data   => tx_data,
 			tx        => tx,
+			tx_accept => tx_accept,
 			tx_busy   => tx_busy
 		);
 
@@ -116,57 +107,130 @@ begin
             wait for T_BIT;
 		end loop;
         
-
 		-- Test 2: 0x5A --
-		data_to_read <= x"5A";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 3: 0x00 --
-		data_to_read <= x"00";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 4: 0xFF --
-		data_to_read <= x"FF";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 5: 0xAA --
-		data_to_read <= x"AA";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 6: LSB only (0x01) --
-		data_to_read <= x"01";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 7: MSB only (0x80) --
-		data_to_read <= x"80";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 8: Back-to-back --
-		data_to_read <= x"12";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		data_to_read <= x"34";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
-		wait for 5*T_CLK;
-
-		-- Test 9: Reset while transmission --
-		data_to_read <= x"99";
-
 		wait until rising_edge(clk);
-		tx_data <= data_to_read;
 		tx_start <= '1';
+		tx_data <= x"5A";
 
-		if tx_busy /= '0' then
-			wait until tx_busy = '0';
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
 		end if;
-		wait for T_BIT/2;
 		
 		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 3: 0x00 --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"00";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 4: 0xFF --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"FF";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 5: 0xAA --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"AA";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 6: LSB only (0x01) --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"01";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 7: MSB only (0x80) --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"80";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
+
+		-- Test 8: Back-to-back --
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"12";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+
+		check_tx_frame(tx, tx_data);
+
+		if tx_busy = '1' then
+			wait until tx_busy /= '1';
+		end if;
+		
+		tx_data <= x"34";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+
+		wait for T_BIT;
+
+		-- Test 9: Reset while transmission --
+
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"99";
+
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+
+		tx_start <= '0';
+
+		wait for T_BIT/2;
 
 		wait for 4*T_BIT;
 
@@ -183,10 +247,18 @@ begin
 			severity error;
 
 		-- Test 10: Recovery from reset --
-		data_to_read <= x"E3";
-		send_uart_frame(tx, tx_start, tx_data, data_to_read);
+		wait until rising_edge(clk);
+		tx_start <= '1';
+		tx_data <= x"E3";
 
-		data_to_read <= (others => '0');
+		if tx_busy = '0' then
+			wait until tx_busy /= '0';
+		end if;
+		
+		tx_start <= '0';
+
+		check_tx_frame(tx, tx_data);
+		wait for T_BIT;
 
 		wait for 10 us;
 

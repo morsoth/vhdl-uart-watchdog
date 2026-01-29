@@ -1,30 +1,43 @@
 [*]
 [*] GTKWave Analyzer v3.3.124 (w)1999-2025 BSI
-[*] Fri Jan 23 07:32:50 2026
+[*] Mon Jan 26 17:53:46 2026
 [*]
-[dumpfile] "C:\Users\pzaragoza\Documents\GitHub\vhdl-uart-watchdog\waves\build\tb_uart_tx.ghw"
+[dumpfile] "C:\Users\pzaragoza\Documents\GitHub\vhdl-uart-watchdog\build\tb_uart_tx.ghw"
+[dumpfile_mtime] "Mon Jan 26 17:53:24 2026"
+[dumpfile_size] 699915
 [savefile] "C:\Users\pzaragoza\Documents\GitHub\vhdl-uart-watchdog\waves\tb_uart_tx.gtkw"
 [timestart] 0
 [size] 1920 983
-[pos] -123 -120
-*-34.799999 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -27 -24
+*-35.400002 96869000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top.
 [treeopen] top.tb_uart_tx.
 [treeopen] top.tb_uart_tx.u_tx.
 [sst_width] 280
-[signals_width] 200
+[signals_width] 299
 [sst_expanded] 1
 [sst_vpaned_height] 289
 @28
 top.tb_uart_tx.u_tx.clk
 top.tb_uart_tx.u_tx.rst
 top.tb_uart_tx.u_tx.uart_tick
+@200
+-
+@28
 top.tb_uart_tx.u_tx.tx_start
+top.tb_uart_tx.u_tx.tx_ready
 top.tb_uart_tx.u_tx.tx_busy
+@200
+-
+@420
+top.tb_uart_tx.u_tx.state
+@200
+-
+@28
 top.tb_uart_tx.u_tx.tx
-@23
-#{top.tb_uart_tx.u_tx.tx_data[7:0]} top.tb_uart_tx.u_tx.tx_data[7] top.tb_uart_tx.u_tx.tx_data[6] top.tb_uart_tx.u_tx.tx_data[5] top.tb_uart_tx.u_tx.tx_data[4] top.tb_uart_tx.u_tx.tx_data[3] top.tb_uart_tx.u_tx.tx_data[2] top.tb_uart_tx.u_tx.tx_data[1] top.tb_uart_tx.u_tx.tx_data[0]
 @22
 #{top.tb_uart_tx.data_to_read[7:0]} top.tb_uart_tx.data_to_read[7] top.tb_uart_tx.data_to_read[6] top.tb_uart_tx.data_to_read[5] top.tb_uart_tx.data_to_read[4] top.tb_uart_tx.data_to_read[3] top.tb_uart_tx.data_to_read[2] top.tb_uart_tx.data_to_read[1] top.tb_uart_tx.data_to_read[0]
+#{top.tb_uart_tx.u_tx.tx_data[7:0]} top.tb_uart_tx.u_tx.tx_data[7] top.tb_uart_tx.u_tx.tx_data[6] top.tb_uart_tx.u_tx.tx_data[5] top.tb_uart_tx.u_tx.tx_data[4] top.tb_uart_tx.u_tx.tx_data[3] top.tb_uart_tx.u_tx.tx_data[2] top.tb_uart_tx.u_tx.tx_data[1] top.tb_uart_tx.u_tx.tx_data[0]
+#{top.tb_uart_tx.u_tx.data_reg[7:0]} top.tb_uart_tx.u_tx.data_reg[7] top.tb_uart_tx.u_tx.data_reg[6] top.tb_uart_tx.u_tx.data_reg[5] top.tb_uart_tx.u_tx.data_reg[4] top.tb_uart_tx.u_tx.data_reg[3] top.tb_uart_tx.u_tx.data_reg[2] top.tb_uart_tx.u_tx.data_reg[1] top.tb_uart_tx.u_tx.data_reg[0]
 [pattern_trace] 1
 [pattern_trace] 0
